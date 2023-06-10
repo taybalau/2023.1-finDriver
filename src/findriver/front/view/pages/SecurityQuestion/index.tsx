@@ -28,9 +28,10 @@ const SecurityQuestion = ({ route, navigation }) => {
             })
 
         };
-        fetch('http://192.168.1.3:3000/api/user/cadastro', requestOptions)
+        fetch('http://192.168.1.5:3000/api/user/cadastro', requestOptions)
             .then((response) => {
                 console.log(response.status)
+                console.log(name, email, password)
                 if (response.status == 201) {
                     Alert.alert('Usuário cadastrado com sucesso!');
                 }

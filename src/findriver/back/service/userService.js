@@ -1,7 +1,5 @@
 const { createClient } = require("@supabase/supabase-js");
 var bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const env = require("dotenv");
 
 require("dotenv").config();
 
@@ -12,7 +10,7 @@ const supabase = createClient(
 
 const createUser = async (User) => {
 
-  var salt = bcrypt.genSaltSync(10)
+  let salt = bcrypt.genSaltSync(10)
   var encryptedPassword = bcrypt.hashSync(User.password, salt)
 
   const { data, error } = await supabase
@@ -25,26 +23,8 @@ const createUser = async (User) => {
       answerTwo: User.answerTwo,
       questionOne: User.questionOne, 
       questionTwo: User.questionTwo,
-      token: "null"
     }])
     .select('id')
-
-<<<<<<< Updated upstream
-    const token = createToken(data);
-
-    await supabase.from('Users').update([{
-=======
-  console.log('to no backendsss')
-
-  const { error } = await supabase
-    .from('Users').insert([{
-      name: User.name, email: User.email, password: encryptedPassword,
-      answerOne: User.answerOne, answerTwo: User.answerTwo,
-      questionOne: User.questionOne, questionTwo: User.questionTwo,
->>>>>>> Stashed changes
-      token: token
-    }]).eq('email', User.email)
-
 
   if (error) {
     if (error.code == '23505') {
@@ -55,7 +35,7 @@ const createUser = async (User) => {
     }
   } else {
     console.log(error)
-    return token;
+    return ;
   }
 }
 
@@ -78,9 +58,7 @@ async function getUserByEmail(user) {
 async function updateUserById(user, id) {
 
   if (user.password) {
-    console.log('to aqui')
-    console.log(user.password)
-    var salt = bcrypt.genSaltSync(10)
+    const salt = bcrypt.genSaltSync(10)
     var encryptedPassword = bcrypt.hashSync(user.password, salt)
   }
 
@@ -106,15 +84,6 @@ async function deleteUserById(id) {
     .delete()
     .eq('id', id)
     
-};
-
-const createToken = (user) => {
-  const token = jwt.sign(
-    { data: user }, 
-    process.env.TOKEN_KEY,
-    );
-    console.log(token);
-  return token;
 };
 
 module.exports = { createUser, getUserByEmail, updateUserById, deleteUserById, supabase };
